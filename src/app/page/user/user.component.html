@@ -1,7 +1,12 @@
+<button type="button" class="btn btn-primary rounded-circle btn-xl shadow  btn-float"  (click)="openModal(tpUser)" ><i class="fa fa-plus"></i></button> 
+
+
 <h1>Usuarios</h1>
 <hr />
 
 <div class="table-responsive">
+
+<alert *ngIf="alert" type="danger" [dismissible]="true" dismissOnTimeout="5000"  (onClosed)="alert=!alert" >  Usuario no se puede eliminar, tiene tareas asociadas </alert>
 
 <table class="table table-hover">
     <thead>
@@ -18,9 +23,66 @@
         <td>{{ user.nombre }}</td>
         <td>{{ user.email }}</td>
         <td>
-          ...
+          <div class="dropleft float-right" dropdown >
+            <button  dropdownToggle type="button" class="btn btn-link">
+              <i class="fa fa-ellipsis-v"></i>
+            </button>
+            <ul  *dropdownMenu class="dropdown-menu" role="menu" >
+              <li role="menuitem"><button class="dropdown-item" (click)="openEdit(tpUser,user)" > <i class="fa fa-eye"></i>  Ver </button></li>
+              <li role="menuitem"><button class="dropdown-item" (click)="openDelete(tpConfirm,user)" > <i class="fa fa-trash"></i> Borrar </button></li>
+            </ul>
+        </div>
         </td>
       </tr>
     </tbody>
 </table>
 </div>
+
+
+<ng-template #tpUser>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left"> {{titleModal}} </h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+        <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      
+      <form autocomplete="off" #userForm="ngForm">
+          <div class="form-group">
+            <label for="nombre">Nombre *</label>
+            <input type="text" class="form-control" id="nombre"  name="nombre" [(ngModel)]="user.nombre" #nombre="ngModel" required>
+            <span [hidden]="nombre.valid || nombre.pristine"  class="text-danger small float-right">  Nombre requerido </span>
+          </div>
+          <div class="form-group">
+              <label for="email">Email *</label>
+              <input type="email" class="form-control" id="email" name="email" [(ngModel)]="user.email" #email="ngModel" required  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$">
+              <span [hidden]="email.valid || email.pristine"  class="text-danger small float-right">  Email requerido, con formato **@**.** </span>
+          </div>
+      </form>	
+  
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modalRef?.hide()">Cerrar</button>
+      <button type="button" class="btn btn-primary"  (click)="save()" [disabled]="!userForm.form.valid" >Guardar Cambios</button>
+    </div>
+  </ng-template>
+
+
+  <ng-template #tpConfirm>
+    <div class="modal-header">
+      <h4 class="modal-title pull-left">Confirme Acción</h4>
+      <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true">&times;</span>
+      </button>
+    </div>
+    <div class="modal-body">
+      ¿ Esta seguro de borrar el usuario ?
+    </div>
+    <div class="modal-footer">
+      <button type="button" class="btn btn-secondary" (click)="modalRef?.hide()">Cancelar</button>
+      <button type="button" class="btn btn-primary" (click)="save()">Aceptar</button>
+    </div>
+  </ng-template>
+
+<app-loading [showLoad]="isLoad"></app-loading>

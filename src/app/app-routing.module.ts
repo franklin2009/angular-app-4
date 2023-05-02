@@ -22,6 +22,7 @@ const routes: Routes = [
       {
         path: '',
         component: LoginComponent,
+        canActivate: [AuthGuard],
       }
     ]
   },
@@ -37,11 +38,12 @@ const routes: Routes = [
       {
         path: 'task',
         component: TaskComponent,
-       /* canActivate: [AuthGuard] */
+        canActivate: [AuthGuard]
       },
       {
         path: 'user',
         component: UserComponent,
+        canActivate: [AuthGuard],
       },
       {
         path: 'contact',

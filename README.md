@@ -25,3 +25,7 @@ Actualizar vista / componente usuario para crear, editar, eliminar
 Actualizar servicio usuario para conectar backend
 Anadir un alerta en la vista de usuario que gestione la regla para borrar un usuario. (si un usuario tiene tareas asociadas no se puede borrar, se envia un error 300). Texto: “Usuario no se puede eliminar, tiene tareas asociadas”
 Activar Guard  en las rutas para el componente usuario
+
+## Login Test
+ email:      test1@gmail.com
+ password:   123
