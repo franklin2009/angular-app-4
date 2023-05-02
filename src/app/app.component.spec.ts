@@ -20,16 +20,16 @@ describe('AppComponent', () => {
     expect(app).toBeTruthy();
   });
 
-  it(`should have as title 'angular-app-4'`, () => {
+  it(`should have as title 'angular-a-4'`, () => {
     const fixture = TestBed.createComponent(AppComponent);
     const app = fixture.componentInstance;
-    expect(app.title).toEqual('angular-app-4');
+    expect(app.title).toEqual('angular-a-4');
   });
 
   it('should render title', () => {
     const fixture = TestBed.createComponent(AppComponent);
     fixture.detectChanges();
     const compiled = fixture.nativeElement as HTMLElement;
-    expect(compiled.querySelector('.content span')?.textContent).toContain('angular-app-4 app is running!');
+    expect(compiled.querySelector('.content span')?.textContent).toContain('angular-a-4 app is running!');
   });
 });

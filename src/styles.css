@@ -1,1 +1,119 @@
 /* You can add global styles to this file, and also import other style files */
+
+/*
+@import '~bootstrap/dist/css/bootstrap.min.css';
+@import '~font-awesome/css/font-awesome.min.css';
+@import '~ngx-bootstrap/datepicker/bs-datepicker.css';
+*/
+
+
+html {
+  position: relative;
+  min-height: 100%;
+}
+
+body {
+  margin-bottom: 90px;
+}
+
+.navbar {
+  margin-bottom: 20px;
+}
+
+.footer {
+  position: absolute;
+  bottom: 0;
+  width: 100%;
+  height: 65px;
+  background-color: #f5f5f5;
+}
+
+.footer .container {
+  width: auto;
+  max-width: 680px;
+  padding: 0 15px;
+  text-align:center;
+}
+
+.footer .container .text-muted {
+  margin: 20px 0;
+}
+
+img.avatar{
+ width: 32px;
+ height: 32px;
+}
+
+span.name{
+  font-weight: bold;
+}
+
+span.time{
+  font-size: x-small;
+  float: right;
+  margin-top: -10px;
+}
+
+.card-text {
+	padding-left: 10px;
+}
+
+.card-header {
+  height: 60px!important;
+  background-color: white;
+}
+
+.border-left-success {
+    border-left: 1px solid #2DC09D!important;
+}
+
+.border-left-danger {
+    border-left: 1px solid #DC3646!important;
+}
+
+.btn-float{
+	position:fixed;
+	right: 10%;
+	z-index: 100;
+}
+
+.dropleft .dropdown-menu {
+  top: 25px !important;
+  right: 20px !important;
+  left: auto !important;
+}
+
+.overlay-load {
+  position: fixed;
+  width: 100%;
+  height: 100%;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: rgba(0,0,0,0.5);
+  z-index: 10000;
+}
+
+.overlay-load > p {
+  margin: 0;
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  margin-right: -50%;
+  transform: translate(-50%, -50%)
+}
+
+.text-description{
+  height: 100px;
+  overflow: hidden;
+}
+
+
+.ng-valid[required], .ng-valid.required  {
+  border-left: 5px solid #42A948;
+}
+
+.ng-invalid:not(form)  {
+  border-left: 5px solid #a94442;
+}

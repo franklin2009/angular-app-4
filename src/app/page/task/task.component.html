@@ -1,0 +1,156 @@
+<button type="button" class="btn btn-primary rounded-circle btn-xl shadow  btn-float"  (click)="openNew(tpTask)" ><i class="fa fa-plus"></i></button>
+
+<div class="col-sm-8 mx-auto">
+	<h1>Tareas</h1>
+	<hr />
+	
+	<div class="row">
+
+		<div class="col-xl-6 col-lg-6 col-sm-12" *ngFor="let task of tasks">
+			<div class="card shadow mb-4" >
+				<div class="card-header py-3">
+					<span class="badge "  [ngClass]="{'badge-success':task.estatus=='A', 'badge-danger':task.estatus=='F'}"> 
+						{{ (task.estatus=='A'?'Activa':'Finalizada') }}
+					</span>  
+					<button type="button" class="btn btn-primary btn-sm float-right"  *ngIf="task.estatus=='A'" (click)="openTime(tpTime,task)"> <i class="fa fa-clock-o" aria-hidden="true"></i> Agregar tiempo</button>
+				</div>
+				<div class="card-body">	
+					<div class="card-title">
+						<span class="time" *ngIf="task.estatus=='A'" > <i class="fa fa-clock-o" aria-hidden="true"></i> Finaliza: {{ task.tiempo.resta }} </span>
+						<img src="https://www.gravatar.com/avatar/{{ task.usuario.avatar }}&s=40" alt="{{ task.usuario.nombre }}"  class="rounded-circle avatar"/>
+						<span class="name"> {{ task.usuario.nombre }} </span>
+					</div>
+					<div class="card-text border-left-success"  [ngClass]="{'border-left-success':task.estatus=='A', 'border-left-danger':task.estatus=='F'}">
+						<b> {{ task.titulo }} </b>
+	
+						<div class="dropleft float-right" dropdown >
+								<button  dropdownToggle type="button" class="btn btn-link">
+									<i class="fa fa-ellipsis-v"></i>
+								</button>
+								<ul  *dropdownMenu class="dropdown-menu" role="menu" >
+								  <li role="menuitem"><button class="dropdown-item" (click)="openEdit(tpTask,task)" > <i class="fa fa-eye"></i>  Ver </button></li>
+								  <li role="menuitem"><button class="dropdown-item" (click)="openDelete(tpConfirm,task)" > <i class="fa fa-trash"></i> Borrar </button></li>
+								</ul>
+						</div>
+
+						<p class="text-description"> {{ task.descripcion }}  </p>
+					</div>
+				</div>
+			</div>
+		</div>
+
+	</div>
+
+</div>
+
+<ng-template #tpTask>
+  <div class="modal-header">
+    <h4 class="modal-title pull-left"> {{titleModal}} </h4>
+    <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+      <span aria-hidden="true">&times;</span>
+    </button>
+  </div>
+  <div class="modal-body">
+	<form autocomplete="off" #tareaForm="ngForm">
+		<div class="form-group">
+		  <label for="titulo">Titulo *</label>
+		  <input type="text" class="form-control " id="titulo"  name="titulo"  [disabled]="task.disabled"  [(ngModel)]="task.titulo" #titulo="ngModel" required >
+		  <span [hidden]="titulo.valid || titulo.pristine"  class="text-danger small float-right">  Titulo requerido </span>
+		</div>
+		<div class="form-group">
+			<label for="descripcion">Descripcion *</label>
+			<input type="text" class="form-control " id="descripcion"  name="descripcion" [disabled]="task.disabled"  [(ngModel)]="task.descripcion" #descripcion="ngModel" required>
+			<span [hidden]="descripcion.valid || descripcion.pristine"  class="text-danger small float-right">  Descripcion requerida </span>
+		</div>
+		<div class="form-group">
+			<label for="usuario">Usuario *</label>
+			<select  class="form-control " id="usuario"  [disabled]="task.disabled"  required  [(ngModel)]="task.usuario_id"  name="usuario" #usuario="ngModel">
+				<option *ngFor="let user of users" [value]="user.id"> {{ user.nombre }}</option>
+			</select>
+			<span [hidden]="usuario.valid || usuario.pristine"  class="text-danger small float-right">  Usuario requerido </span>
+		</div>
+		<div class="row">
+			<div class="col-8">
+				<div class="form-group">
+					<label for="fecha">Fecha y hora * </label>
+					<input type="text" class="form-control " id="fecha" name="fecha" bsDatepicker   [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }" placement="top"  [disabled]="task.disabled"  [(ngModel)]="task.tiempo.fecha" #fecha="ngModel" required>
+					<span [hidden]="fecha.valid || fecha.pristine"  class="text-danger small float-right">  Fecha requerida </span>
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="form-group">
+					<timepicker  [showMeridian]="false"  [disabled]="task.disabled"  [(ngModel)]="mTime" id="mTime" name="mTime"></timepicker>
+					<span [hidden]="true"  class="text-danger small float-right">  Hora requerida </span>
+				</div>
+			</div>
+		</div>
+
+		<div class="custom-control custom-checkbox" *ngIf="!task.disabled && action!='n'">
+			<input type="checkbox" class="custom-control-input" id="estatus" name="estatus"  [(ngModel)]="task.status"  [disabled]="task.disabled" >
+			<label class="custom-control-label" for="estatus">Finalizar Tarea</label>
+		  </div>
+	</form>	
+
+  </div>
+  <div class="modal-footer">
+	<button type="button" class="btn btn-secondary" (click)="modalRef?.hide()" >Cerrar</button>
+	<button type="button" class="btn btn-primary" [disabled]="task.disabled" (click)="save()" [disabled]="!tareaForm.form.valid" >Guardar Cambios</button>
+  </div>
+</ng-template>
+
+
+<ng-template #tpTime>
+	<div class="modal-header">
+	  <h4 class="modal-title pull-left">Agregar Tiempo</h4>
+	  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+		<span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	<div class="modal-body">
+	  
+	  <form autocomplete="off">
+
+		<div class="row">
+			<div class="col-8">
+				<div class="form-group">
+					<label for="fecha">Fecha y hora * </label>
+					<input type="text" class="form-control " id="fecha2" name="fecha2" bsDatepicker   [bsConfig]="{ dateInputFormat: 'YYYY-MM-DD' }" placement="bottom"  [disabled]="task.disabled"  [(ngModel)]="task.tiempo.fecha" #fecha2="ngModel" required>
+					<span [hidden]="fecha2.valid || fecha2.pristine"  class="text-danger small float-right">  Fecha requerida </span>
+				</div>
+			</div>
+			<div class="col-4">
+				<div class="form-group">
+					<timepicker  [showMeridian]="false"  [disabled]="task.disabled"  [(ngModel)]="mTime" id="mTime2" name="mTime2"></timepicker>
+					<span [hidden]="true">  Hora requerida </span>
+				</div>
+			</div>
+		</div>
+
+	  </form>	
+  
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-secondary" (click)="modalRef?.hide()">Cerrar</button>
+	  <button type="button" class="btn btn-primary" (click)="save()">Guardar Cambios</button>
+	</div>
+</ng-template>
+  
+
+<ng-template #tpConfirm>
+	<div class="modal-header">
+	  <h4 class="modal-title pull-left">Confirme Acción</h4>
+	  <button type="button" class="close pull-right" aria-label="Close" (click)="modalRef?.hide()">
+		<span aria-hidden="true">&times;</span>
+	  </button>
+	</div>
+	<div class="modal-body">
+		¿ Esta seguro de borrar la tarea ?
+	</div>
+	<div class="modal-footer">
+	  <button type="button" class="btn btn-secondary" (click)="modalRef?.hide()">Cancelar</button>
+	  <button type="button" class="btn btn-primary" (click)="save()">Aceptar</button>
+	</div>
+</ng-template>
+
+
+<app-loading [showLoad]="isLoad"></app-loading>
